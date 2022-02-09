@@ -17,21 +17,21 @@ func main() {
 		case "SET":
 			if len(args) != 3 {
 				fmt.Println("Wrong args for SET. Use SET varName varValue")
-				return
+			} else {
+				txHandler.HandleSet(args[1], args[2])
 			}
-			txHandler.HandleSet(args[1], args[2])
 		case "UNSET":
 			if len(args) != 2 {
 				fmt.Println("Wrong args for UNSET. Use UNSET varName")
-				return
+			} else {
+				txHandler.HandleUnSet(args[1])
 			}
-			txHandler.HandleUnSet(args[1])
 		case "GET":
 			if len(args) != 2 {
 				fmt.Println("Wrong args for GET. Use GET varName")
-				return
+			} else {
+				txHandler.HandleGet(args[1])
 			}
-			txHandler.HandleGet(args[1])
 		case "BEGIN":
 			txHandler.HandleBegin()
 		case "ROLLBACK":
