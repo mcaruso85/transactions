@@ -38,6 +38,8 @@ func main() {
 			txHandler.HandleRollback()
 		case "COMMIT":
 			txHandler.HandleCommit()
+		case "EXIT":
+			os.Exit(0)
 		default:
 			fmt.Println("Wrong command. Please enter a valid command: SET, UNSET, GET, BEGIN, ROLLBACK, COMMIT")
 		}
