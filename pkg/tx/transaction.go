@@ -15,6 +15,9 @@ func (t *transaction) addOperation(op operation) {
 }
 
 func (a *transaction) handleRollback() {
+	/* Iterate doing a pop in the operations stack of the tx
+	 * Execute rollback on every transaction
+	 */
 	for {
 		elem, hasOp := a.operations.pop()
 		if !hasOp {
