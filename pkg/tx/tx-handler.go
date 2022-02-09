@@ -25,12 +25,12 @@ func (t *TxHandler) HandleUnSet(varName string) {
 }
 
 func (t *TxHandler) handleOp(varName string, newValue string) {
-	op := newOperation(t.state, varName, newValue)
-	elem, hasTx := t.transactions.Pop()
+	op := newChangeOperation(t.state, varName, newValue)
+	elem, hasTx := t.transactions.pop()
 	if hasTx {
 		tx := elem.(*transaction)
 		tx.addOperation(op)
-		t.transactions.Push(tx)
+		t.transactions.push(tx)
 	}
 	op.execute()
 }
@@ -41,11 +41,11 @@ func (a *TxHandler) HandleGet(varName string) {
 
 func (t *TxHandler) HandleBegin() {
 	tx := newTransaction()
-	t.transactions.Push(tx)
+	t.transactions.push(tx)
 }
 
 func (t *TxHandler) HandleRollback() {
-	elem, hasTx := t.transactions.Pop()
+	elem, hasTx := t.transactions.pop()
 	if !hasTx {
 		fmt.Println("First you need to BEGIN a transaction")
 		return
@@ -55,7 +55,7 @@ func (t *TxHandler) HandleRollback() {
 }
 
 func (t *TxHandler) HandleCommit() {
-	_, hasValue := t.transactions.Pop()
+	_, hasValue := t.transactions.pop()
 	if !hasValue {
 		fmt.Println("First you need to BEGIN a transaction")
 		return

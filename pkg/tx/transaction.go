@@ -10,17 +10,17 @@ func newTransaction() *transaction {
 	}
 }
 
-func (t *transaction) addOperation(op *operation) {
-	t.operations.Push(op)
+func (t *transaction) addOperation(op operation) {
+	t.operations.push(op)
 }
 
 func (a *transaction) handleRollback() {
 	for {
-		elem, hasOp := a.operations.Pop()
+		elem, hasOp := a.operations.pop()
 		if !hasOp {
 			break
 		}
-		op := elem.(*operation)
+		op := elem.(operation)
 		op.handleRollback()
 	}
 }

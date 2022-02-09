@@ -1,21 +1,26 @@
 package tx
 
-type operation struct {
+type operation interface {
+	execute()
+	handleRollback()
+}
+
+type changeOperation struct {
 	state    map[string]string
 	varName  string
 	newValue string
 	oldValue string
 }
 
-func newOperation(state map[string]string, varName string, newValue string) *operation {
-	return &operation{
+func newChangeOperation(state map[string]string, varName string, newValue string) *changeOperation {
+	return &changeOperation{
 		state:    state,
 		varName:  varName,
 		newValue: newValue,
 	}
 }
 
-func (o *operation) execute() {
+func (o *changeOperation) execute() {
 	o.oldValue = o.state[o.varName]
 	if o.newValue == "" {
 		delete(o.state, o.varName)
@@ -24,7 +29,7 @@ func (o *operation) execute() {
 	}
 }
 
-func (o *operation) handleRollback() {
+func (o *changeOperation) handleRollback() {
 	if o.oldValue == "" {
 		delete(o.state, o.varName)
 	} else {
